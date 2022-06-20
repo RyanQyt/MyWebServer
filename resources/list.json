@@ -1,8 +1,14 @@
 [
 	{
-		"filename" : "\u8fdb\u6765\u5427.jpg"
+		"filename" : "test.txt"
+	},
+	{
+		"filename" : "letin.jpg"
 	},
 	{
 		"filename" : "1.txt"
+	},
+	{
+		"filename" : "xxx.mp4"
 	}
 ]

@@ -75,10 +75,12 @@ void HttpRequest::init()
 {
     method = path = version = body = "";
     linger = false;
+    isDownload = isRange = isEtag = false;
     contentLen = 0;
     state = REQUEST_LINE;
     header.clear();
     post.clear();
+    rangeStart = rangeEnd = -1;
 }
 
 HTTP_CODE HttpRequest::parse(Buffer& buffer)
@@ -169,6 +171,11 @@ void HttpRequest::parsePath()
         }
         write_json("./resources/list.json", root);
     }
+    else if(path.find("/downfiles/") != string::npos){
+        path = path.substr(11, path.size() - 11);
+        LOG_DEBUG("srcPath:%s", path);
+        isDownload = true;
+    }
 }
 
 /* 解析请求行 */
@@ -198,10 +205,39 @@ HTTP_CODE HttpRequest::parseHeader(const string& line)
         header[subMatch[1]] = subMatch[2];
         if (subMatch[1] == "Connection")
             linger = (subMatch[2] == "keep-alive");
-        if (subMatch[1] == "Content-Length")
+        else if (subMatch[1] == "Content-Length")
         {
             contentLen = stoi(subMatch[2]);
         }
+        else if (subMatch[1] == "Range"){
+            // 这个range里如果有左右边界不成对的区间，一定是最后一个区间，其他的都是左右边界成对的区间
+            // (,?(\\d+)-(\\d+))*?表示左右值都有的区间，(,?(\\d+)-|,?-(\\d+))?表示左右边界不成对区间；
+            // (?=[-0-9])表示开头要么是数字要么是-(同时预搜索不参与匹配)，防止空区间""满足正则项
+            regex pattern1("^bytes=(?=[-0-9])(,?(\\d+)-(\\d+))*?(,?(\\d+)-|,?-(\\d+))?$");
+            smatch isRangeMatch;
+            string range = subMatch[2];
+            if(regex_match(range, isRangeMatch, pattern1)){
+                isRange = true;
+                // 对于多个区间，本项目只处理第一个，如果需要处理多个的话，就while一直regex_search下去
+                regex rangePattern("(\\d+)-(\\d+)|(\\d+)-|-(\\d+)");
+                smatch rangeMatch;
+                if(regex_search(range, rangeMatch, rangePattern)){
+                    // 第一个group和第二个group匹配左右成对的区间
+                    if(rangeMatch[1] != "" && rangeMatch[2] != "") {
+                        rangeStart = stoi(rangeMatch[1]);
+                        rangeEnd = stoi(rangeMatch[2]);
+                    }
+                    else if(rangeMatch[3] != "" ) rangeStart = stoi(rangeMatch[3]);
+                    else if(rangeMatch[4] != "" ) rangeEnd = stoi(rangeMatch[4]);
+                }
+            }
+        }
+        
+        else if(subMatch[1] == "If-Range") {
+            isEtag = true;
+            Etag = stoi(subMatch[2]);
+        }
+
         return NO_REQUEST;
     }
     else if (contentLen)

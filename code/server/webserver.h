@@ -58,6 +58,7 @@ private:
     bool shutdown;
     int listenfd;
     char* srcDir;
+    char* downloadDir;
 
     uint32_t listenEvent;
     uint32_t connEvent;

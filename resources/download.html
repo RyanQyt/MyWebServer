@@ -1,6 +1,6 @@
 <!--
- * @Author       : SAKURA
- * @Date         : 2020-06-30
+ * @Author       : RyanQyt
+ * @Date         : 2022-6-15
  * @copyleft GPL 2.0
 -->
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
 
      <meta charset="UTF-8">
 
-     <title>SAKURA-下载</title>
+     <title>RyanQyt-下载</title>
      <link rel="icon" href="images/favicon.ico">
      <link rel="stylesheet" href="css/bootstrap.min.css">
      <link rel="stylesheet" href="css/animate.css">
@@ -52,7 +52,7 @@
                         <span class="icon icon-bar"></span>
                 </button>
                 <!-- lOGO TEXT HERE -->
-                <a href="/" class="navbar-brand">SAKURA</a>
+                <a href="/" class="navbar-brand">RyanQyt</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -99,9 +99,11 @@
             dataType: "json", //返回数据格式为json
             success: function(data) { //请求成功完成后要执行的方法 
                 var str = "";
+                var url1 = ""; // 当前文件的url
                 //each循环 使用$.each方法遍历返回的数据date
                 $.each(data, function(i, item) {
-                    str += '<div><font size="4" color="green">' + item.filename + '</font></div>';
+                    url1 = '/downfiles/' + item.filename;
+                    str += '<div><font size="4" color="green"><a href=' + url1 + ' target = "_blank">' + item.filename + '</a></font></div>';
                     $("#list").html(str);
                 })
             }

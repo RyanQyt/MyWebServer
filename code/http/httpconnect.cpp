@@ -3,6 +3,7 @@
 using namespace std;
 
 const char* HttpConnect::srcDir;
+const char* HttpConnect::downloadSrcDir;
 atomic<int> HttpConnect::userCnt;
 bool HttpConnect::isET;
 
@@ -116,7 +117,13 @@ bool HttpConnect::process()
     else if (ret == HTTP_CODE::GET_REQUEST)
     {
         LOG_DEBUG("%s", request.getPathConst().c_str());
-        response.init(srcDir, request.getPath(), request.isKeepAlive(), 200);
+        if(request.isDownload) {
+            response.init(downloadSrcDir, request.getPath(), request.isKeepAlive(), 200);
+            response.isDownload = request.isDownload;
+        }
+        else response.init(srcDir, request.getPath(), request.isKeepAlive(), 200);
+        
+        response.setRange(request.isRange, request.rangeStart, request.rangeEnd, request.isEtag, request.Etag);
         request.init(); // 如果是长连接，等待下一次请求，需要初始化
     }
     //请求行错误, bad request
@@ -133,8 +140,14 @@ bool HttpConnect::process()
     //响应体
     if (response.getFileLen() > 0 && response.getFile())
     {
-        iov[1].iov_base = response.getFile();
-        iov[1].iov_len = response.getFileLen();
+        if(response.isRange) {
+            iov[1].iov_base = response.getFile() + response.rangeOffset;
+            iov[1].iov_len = response.getRangeLen();
+        }
+        else {
+            iov[1].iov_base = response.getFile();
+            iov[1].iov_len = response.getFileLen();
+        }
         iovCnt = 2;
     }
 

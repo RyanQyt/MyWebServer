@@ -1,0 +1,90 @@
+{
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "g++ debug",
+             // type 告诉vscode编译器的类型，我用的MinGW64也就是g++，这里是cppdgb
+            "type": "cppdbg", 
+            "request": "launch",
+            // program 这个是你的可执行程序位置，这里可以根据自己的tasks.json生成
+            // 程序的位置自定义修改，等会参照后面的tasks.json内容
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+            "args": [], 
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            // 调试器的路径
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // preLaunchTask 表示在 执行调试前 要完成的任务
+            // 比如这里 要完成 makeRun 这个tasks任务（重新生成程序）
+            // 这里的 makeRun 是 tasks.json 中 lable 标记的任务名称
+            "preLaunchTask": "g++ bulid & debug",
+        },
+        
+        {
+            "name": "g++ 生成调试文件",
+             // type 告诉vscode编译器的类型，我用的MinGW64也就是g++，这里是cppdgb
+             // 这个是规定的，不是随便写，比如msvc编译器就是cppvsdbg
+            "type": "cppdbg", 
+            "request": "launch",
+            // program 这个是你的可执行程序位置，这里可以根据自己的tasks.json生成
+            // 程序的位置自定义修改，等会参照后面的tasks.json内容
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+            "args": [], 
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            // 调试器的路径
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // preLaunchTask 表示在 执行调试前 要完成的任务
+            // 比如这里 要完成 makeRun 这个tasks任务（重新生成程序）
+            // 这里的 makeRun 是 tasks.json 中 lable 标记的任务名称
+            "preLaunchTask": "C/C++: g++ 生成活动文件",
+        },
+        {
+            "name": "gcc - 生成和调试活动文件",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": ["9190"],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "C/C++: gcc 生成活动文件",
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}

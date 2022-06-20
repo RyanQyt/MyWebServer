@@ -47,6 +47,7 @@ public:
 
     static bool isET;
     static const char* srcDir;
+    static const char* downloadSrcDir;
     static atomic<int> userCnt;
 
 private:

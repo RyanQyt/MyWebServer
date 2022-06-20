@@ -49,6 +49,12 @@ public:
     string getMethod() const {return method;}
     string getVersion() const {return version;}
     bool isKeepAlive() const;
+    // isDownload:是否下载，isRange:是否断点续传
+    bool isDownload, isRange, isEtag;
+    // int:支持最大2GB的range请求
+    int rangeStart, rangeEnd;
+    // 这里Etag的规则是文件名+最后修改时间的hash
+    int Etag;
 
 private:
     HTTP_CODE parseRequestLine(const string& line);

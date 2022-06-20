@@ -14,10 +14,13 @@ WebServer::WebServer(
 {
     //内部调用malloc动态分配缓存
     srcDir = getcwd(nullptr, 256);
+    downloadDir = getcwd(nullptr, 256);
     assert(srcDir);
     strncat(srcDir, "/resources/", 16);
+    strncat(downloadDir, "/files/", 16);
     HttpConnect::userCnt = 0;
     HttpConnect::srcDir = srcDir;
+    HttpConnect::downloadSrcDir = downloadDir;
     //线程池唯一实例初始化
     ThreadPool::instance()->init(threadNum, maxRequests);
     //连接池唯一实例初始化
