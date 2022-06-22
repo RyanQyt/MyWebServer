@@ -42,7 +42,7 @@
 ## 项目启动
 将项目克隆到本地
 ```
-git clone -b upload https://github.com/Sakura1221/SimpleWebServer.git
+git clone -b download https://github.com/RyanQyt/MyWebServer.git
 // 还要添加jsoncpp子模块，在项目根目录下执行
 git submodule update --init --recursive
 ```
@@ -81,9 +81,23 @@ make
 127.0.0.1:9006
 #9006是在main函数中传入的服务器监听端口
 ```
-## TODO
-- config配置
-- webbench压力测试
+
+## webbench压力测试
+使用webbench1.5进行压力测试
+``
+下载：wget http://home.tiscali.cz/~cz210552/distfiles/webbench-1.5.tar.gz
+解压：tar zxvf webbench-1.5.tar.gz
+
+然后编译webbench：先执行make，再执行 sudo make install
+这里可能会有ctags依赖包需要安装：可执行命令sudo apt-get install ctags来进行安装
+``
+
+``
+webbench -c 500  -t  30   http://127.0.0.1:9006/index.html
+``
+测试环境：腾讯云轻量应用服务器，2核2G
+本地测试结果：
+Speed=85508 pages/min, 4906849 bytes/sec.
 
 ## 致谢
 Linux高性能服务器编程，游双著
