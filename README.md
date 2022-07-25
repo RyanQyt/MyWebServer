@@ -93,11 +93,19 @@ make
 ``
 
 ``
-webbench -c 500  -t  30   http://127.0.0.1:9006/index.html
+webbench -c 500  -t  30   http://127.0.0.1:9006/index.html  
+``  
+测试环境：腾讯云轻量应用服务器，2核2G  
+本地测试结果：  
+Speed=85508 pages/min, 4906849 bytes/sec.  
+
 ``
-测试环境：腾讯云轻量应用服务器，2核2G
-本地测试结果：
-Speed=85508 pages/min, 4906849 bytes/sec.
+webbench -c 5000  -t  5   http://127.0.0.1:9006/index.html  
+``
+测试环境 本地ubuntu虚拟机，4核8G：
+本地测试结果：  
+Speed=328794 pages/min, 18867524 bytes/sec. failed = 0  
+能支持5000的并发，QPS = 5480
 
 ## 致谢
 Linux高性能服务器编程，游双著
