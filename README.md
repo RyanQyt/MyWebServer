@@ -100,12 +100,12 @@ webbench -c 500  -t  30   http://127.0.0.1:9006/index.html
 Speed=85508 pages/min, 4906849 bytes/sec.  
 
 ``
-webbench -c 5000  -t  5   http://127.0.0.1:9006/index.html  
+webbench -c 10000  -t  10   http://127.0.0.1:9006/index.html  
 ``
-测试环境 本地ubuntu虚拟机，4核8G：
+测试环境 本地ubuntu虚拟机，4核12G：
 本地测试结果：  
-Speed=328794 pages/min, 18867524 bytes/sec. failed = 0  
-能支持5000的并发，QPS = 5480
+Speed=744894 pages/min, 4274390 bytes/sec. failed = 0  
+能支持12000的并发，QPS = 12414
 
 ## 致谢
 Linux高性能服务器编程，游双著
